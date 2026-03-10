@@ -1,10 +1,10 @@
-# README - Lab01 (MongoDB CRUD Operation)
+# Lab01 (MongoDB CRUD Operation)
 
 ## 1. Thông tin sinh viên
 
-- Họ tên: **Ngô Văn Thịnh**
-- MSSV: **23521500**
-- Lớp: **IE213.Q21**
+| Họ tên            | MSSV         | Lớp           |
+| :---------------- | :----------- | :------------ |
+| **Ngô Văn Thịnh** | **23521500** | **IE213.Q21** |
 
 ## 2. Thông tin môn học
 
@@ -16,7 +16,7 @@
 
 ## 4. Mô tả ngắn gọn Lab01
 
-Lab01 thực hành thiết lập môi trường MongoDB Atlas/Compass và thao tác CRUD bằng `mongosh` theo đề `BT1.1.2.pdf`.
+Lab01 thực hành thiết lập môi trường MongoDB Atlas/Compass và thao tác CRUD bằng `mongosh`.
 
 ## 5. Cách chạy chương trình
 
@@ -40,6 +40,7 @@ Lab01 thực hành thiết lập môi trường MongoDB Atlas/Compass và thao t
 - Tạo thành công cluster miễn phí trên Atlas.
 
 **Ảnh minh họa:**
+
 ![1.1 - Tạo tài khoản và cluster Atlas](images/1.1-atlas-account-cluster.png)
 
 ### 1.2 Tìm nạp dữ liệu mẫu trên MongoDB Atlas vào cluster
@@ -53,6 +54,7 @@ Lab01 thực hành thiết lập môi trường MongoDB Atlas/Compass và thao t
 - Cluster có sẵn các sample database/collection để kiểm tra kết nối.
 
 **Ảnh minh họa:**
+
 ![1.2 - Nạp sample data trên Atlas](images/1.2-atlas-sample-data.png)
 
 ### 1.3 Cài đặt MongoDB Compass trên máy tính
@@ -66,6 +68,7 @@ Lab01 thực hành thiết lập môi trường MongoDB Atlas/Compass và thao t
 - MongoDB Compass cài đặt thành công và mở được ứng dụng.
 
 **Ảnh minh họa:**
+
 ![1.3 - Cài đặt MongoDB Compass (1)](images/1.3-install-compass-1.png)
 ![1.3 - Cài đặt MongoDB Compass (2)](images/1.3-install-compass-2.png)
 
@@ -82,6 +85,7 @@ Lab01 thực hành thiết lập môi trường MongoDB Atlas/Compass và thao t
 - Compass kết nối thành công đến cluster Atlas.
 
 **Ảnh minh họa:**
+
 ![1.4 - Kết nối Compass với Atlas](images/1.4-compass-connect-atlas.png)
 
 ## Bài 2
@@ -102,6 +106,7 @@ db.createCollection("employees")
 - Tạo thành công database `23521500-IE213` và collection `employees`.
 
 **Ảnh minh họa:**
+
 ![2.1 - Tạo database MSSV-IE213](images/2.1-create-db.png)
 
 ### 2.2 Thêm các document ban đầu vào `employees`
@@ -122,6 +127,7 @@ db.employees.insertMany([
 - Thêm thành công 4 document theo đề bài.
 
 **Ảnh minh họa:**
+
 ![2.2 - Insert các document ban đầu](images/2.2-insert-initial-docs.png)
 
 ### 2.3 Biến trường `id` thành duy nhất
@@ -137,6 +143,7 @@ db.employees.createIndex({ id: 1 }, { unique: true });
 - Trường `id` có ràng buộc unique, không thể insert trùng.
 
 **Ảnh minh họa:**
+
 ![2.3 - Tạo unique index cho id](images/2.3-unique-index-id.png)
 
 ### 2.4 Tìm document có firstname là John và lastname là Doe
@@ -152,6 +159,7 @@ db.employees.find({ "name.first": "John", "name.last": "Doe" });
 - Trả về đúng document của John Doe.
 
 **Ảnh minh họa:**
+
 ![2.4 - Tìm John Doe](images/2.4-find-john-doe.png)
 
 ### 2.5 Tìm những người có tuổi trên 30 và dưới 60
@@ -167,6 +175,7 @@ db.employees.find({ age: { $gt: 30, $lt: 60 } });
 - Trả về đúng danh sách nhân viên thỏa điều kiện tuổi.
 
 **Ảnh minh họa:**
+
 ![2.5 - Tìm tuổi lớn hơn 30 nhỏ hơn 60](images/2.5-find-age-range.png)
 
 ### 2.6 Thêm 2 document có `middle name`, sau đó tìm tất cả document có `middle name`
@@ -213,6 +222,7 @@ db.employees.updateMany(
 - Các document không còn trường `name.middle`.
 
 **Ảnh minh họa:**
+
 ![2.7 - Xóa middle name](images/2.7-unset-middle-name.png)
 
 ### 2.8 Thêm trường `organization: "UIT"` vào tất cả document
@@ -228,6 +238,7 @@ db.employees.updateMany({}, { $set: { organization: "UIT" } });
 - Tất cả document có thêm trường `organization = UIT`.
 
 **Ảnh minh họa:**
+
 ![2.8 - Thêm organization UIT](images/2.8-set-organization-uit.png)
 
 ### 2.9 Điều chỉnh `organization` của nhân viên có id 5 và 6 thành `USSH`
@@ -246,6 +257,7 @@ db.employees.updateMany(
 - Nhân viên có `id = 5, 6` được cập nhật `organization = USSH`.
 
 **Ảnh minh họa:**
+
 ![2.9 - Cập nhật organization id 5 6](images/2.9-update-organization-ussh.png)
 
 ### 2.10 Tính tổng tuổi và tuổi trung bình của nhân viên thuộc UIT và USSH
@@ -271,6 +283,7 @@ db.employees.aggregate([
 - Trả về thống kê `totalAge`, `avgAge`, `count` theo từng organization.
 
 **Ảnh minh họa:**
+
 ![2.10 - Aggregate tổng tuổi và tuổi trung bình](images/2.10-aggregate-age-by-org.png)
 
 ## 7. Kết quả thực hiện tổng quan
