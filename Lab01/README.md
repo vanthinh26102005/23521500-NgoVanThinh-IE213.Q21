@@ -290,14 +290,3 @@ db.employees.aggregate([
 
 - Đã thực hiện xong toàn bộ yêu cầu của Lab01.
 - Tất cả thao tác được chạy bằng **`mongosh` trong MongoDB Compass**.
-
-## 8. Nội dung đã hoàn thành và chưa hoàn thành
-
-### Đã hoàn thành
-
-- Hoàn thành mục 1.1 -> 1.4 (thiết lập môi trường).
-- Hoàn thành mục 2.1 -> 2.10 (CRUD, truy vấn, cập nhật, aggregate).
-
-### Chưa hoàn thành
-
-- Chưa chèn ảnh screenshot thực tế (sẽ bổ sung sau vào thư mục `Lab01/images/`).
