@@ -72,7 +72,7 @@ npm -v
 
 **Ảnh minh họa:**
 
-- [CHÈN ẢNH] `images/1.1-node-version.png` (terminal hiển thị `node -v`, `npm -v`).
+![NodeJS version](images/1.1-node-version.png)
 
 ### 1.2 Cài công cụ soạn thảo mã nguồn
 
@@ -84,9 +84,6 @@ npm -v
 
 - Mở được thư mục lab và chỉnh sửa source code.
 
-**Ảnh minh họa:**
-
-- [CHÈN ẢNH] `images/1.2-vscode-project.png` (màn hình VS Code mở project).
 
 ### 1.3 Khởi tạo cây thư mục dự án
 
@@ -100,7 +97,7 @@ npm -v
 
 **Ảnh minh họa:**
 
-- [CHÈN ẢNH] `images/1.3-project-structure.png` (cây thư mục trong Explorer/terminal).
+![Project structure](images/1.3-project-structure.png)
 
 ### 1.4 Khởi tạo dự án với npm init
 
@@ -116,7 +113,7 @@ npm init -y
 
 **Ảnh minh họa:**
 
-- [CHÈN ẢNH] `images/1.4-npm-init.png` (kết quả terminal hoặc file `package.json`).
+![npm init](images/1.4-npm-init.png)
 
 ### 1.5 Cài dependency mongodb, express, cors, dotenv
 
@@ -130,9 +127,6 @@ npm install mongodb express cors dotenv
 
 - Các thư viện backend đã được thêm vào phần `dependencies`.
 
-**Ảnh minh họa:**
-
-- [CHÈN ẢNH] `images/1.5-install-dependencies.png` (terminal cài package).
 
 ### 1.6 Cài nodemon
 
@@ -144,11 +138,7 @@ npm install --save-dev nodemon
 
 **Kết quả:**
 
-- Có thể chạy server bằng `npm run dev` và tự restart khi đổi code.
-
-**Ảnh minh họa:**
-
-- [CHÈN ẢNH] `images/1.6-install-nodemon.png` (terminal cài nodemon).
+- Chạy server bằng `npm run dev` và tự restart khi đổi code.
 
 ## Bài 2
 
@@ -174,10 +164,6 @@ app.use((req, res) => {
 
 - Server có routing cơ bản và trả lỗi đúng cho endpoint không hợp lệ.
 
-**Ảnh minh họa:**
-
-- [CHÈN ẢNH] `images/2.1-server-js.png` (mã trong `server.js`).
-
 ### 2.2 Tạo file `.env` cho biến môi trường
 
 **Thực hiện:**
@@ -197,9 +183,6 @@ PORT=3000
 
 - Thông số cấu hình được tách khỏi source code.
 
-**Ảnh minh họa:**
-
-- [CHÈN ẢNH] `images/2.2-env-file.png` (file `.env`, nhớ che thông tin nhạy cảm).
 
 ### 2.3 Tạo `index.js` để kết nối DB và chạy server
 
@@ -212,10 +195,6 @@ PORT=3000
 **Kết quả:**
 
 - Server chỉ chạy sau khi kết nối DB thành công.
-
-**Ảnh minh họa:**
-
-- [CHÈN ẢNH] `images/2.3-index-js.png` (mã `index.js`).
 
 ### 2.4 Tạo `api/movies.route.js` để xử lý định tuyến movies
 
@@ -236,7 +215,7 @@ router.route("/").get(MoviesController.apiGetMovies);
 
 **Ảnh minh họa:**
 
-- [CHÈN ẢNH] `images/2.4-movies-route.png` (mã `movies.route.js`).
+![movies.route.js](images/2.4-movies-route.png)
 
 ### 2.5 Thiết lập DAO trong `dao/moviesDAO.js`
 
@@ -251,8 +230,7 @@ router.route("/").get(MoviesController.apiGetMovies);
 - Tầng truy xuất dữ liệu hoạt động đúng theo phân trang và filter (`title`, `rated`).
 
 **Ảnh minh họa:**
-
-- [CHÈN ẢNH] `images/2.5-movies-dao.png` (mã `moviesDAO.js`).
+![moviesDAO.js](images/2.5-movies-dao.png)
 
 ### 2.6 Thiết lập Controller trong `api/movies.controller.js`
 
@@ -267,8 +245,7 @@ router.route("/").get(MoviesController.apiGetMovies);
 - Controller làm lớp trung gian giữa route và DAO.
 
 **Ảnh minh họa:**
-
-- [CHÈN ẢNH] `images/2.6-movies-controller.png` (mã `movies.controller.js`).
+![movies.controller.js](images/2.6-movies-controller.png)
 
 ### 2.7 Đưa controller vào route và kiểm tra endpoint
 
@@ -283,29 +260,12 @@ router.route("/").get(MoviesController.apiGetMovies);
 - Endpoint hoạt động đúng, trả dữ liệu movie từ DB.
 
 **Ảnh minh họa:**
+![run dev](images/2.7-run-dev.png)
 
-- [CHÈN ẢNH] `images/2.7-run-dev.png` (terminal chạy nodemon).
-- [CHÈN ẢNH] `images/2.7-api-response-browser.png` (response trên browser/Postman).
+![api response](images/2.7-api-response-browser.png)
 
 ## 7. Kết quả thực hiện tổng quan
 
 - Hoàn thành các yêu cầu thiết lập backend ở Lab02.
 - Đã tổ chức mã theo mô hình `route -> controller -> dao`.
 - Kết nối được MongoDB Atlas và trả dữ liệu movie qua API.
-
-## 8. Danh sách ảnh cần chèn nhanh
-
-1. `images/1.1-node-version.png`
-2. `images/1.2-vscode-project.png`
-3. `images/1.3-project-structure.png`
-4. `images/1.4-npm-init.png`
-5. `images/1.5-install-dependencies.png`
-6. `images/1.6-install-nodemon.png`
-7. `images/2.1-server-js.png`
-8. `images/2.2-env-file.png`
-9. `images/2.3-index-js.png`
-10. `images/2.4-movies-route.png`
-11. `images/2.5-movies-dao.png`
-12. `images/2.6-movies-controller.png`
-13. `images/2.7-run-dev.png`
-14. `images/2.7-api-response-browser.png`
