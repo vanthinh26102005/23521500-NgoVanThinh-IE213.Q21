@@ -502,15 +502,24 @@ static async getRatings() {
 
 ### 4.4 Thử nghiệm các API mới
 
-**Mẫu request:**
+**Thực hiện (Postman):**
 
-```bash
-curl http://localhost:3000/api/v1/movies/ratings
-```
+1. Test `GET /ratings`:
+- Method: `GET`
+- URL: `http://localhost:3000/api/v1/movies/ratings`
+- Body: **không cần truyền JSON** (để trống).
+- Kết quả mong đợi: status `200`, response là mảng ratings.
 
-```bash
-curl http://localhost:3000/api/v1/movies/id/<movie_id>
-```
+2. Lấy `movie_id` để test API chi tiết phim:
+- Gửi `GET http://localhost:3000/api/v1/movies?moviesPerPage=1`
+- Copy `movies[0]._id`.
+
+3. Test `GET /id/:id`:
+- Method: `GET`
+- URL: `http://localhost:3000/api/v1/movies/id/<movie_id>`
+- Body: **không cần truyền JSON** (để trống).
+- Kết quả mong đợi: status `200`, response có thông tin phim và mảng `reviews`.
+
 
 **Link kiểm tra nhanh API:**
 
@@ -519,7 +528,9 @@ curl http://localhost:3000/api/v1/movies/id/<movie_id>
 
 **Ảnh minh họa:**
 
-![4.4-api-ratings-and-movie-by-id-results](image/4.4-api-ratings-and-movie-by-id-results.png)
+![4.4-get-ratings-postman](image/4.4-get-ratings-postman.png)
+
+![4.4-get-movie-by-id-postman](image/4.4-get-movie-by-id-postman.png)
 
 ## 7. Kết quả thực hiện tổng quan
 
