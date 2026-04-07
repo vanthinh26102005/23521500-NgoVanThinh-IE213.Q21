@@ -69,6 +69,16 @@ npm run dev
 
 - Đường dẫn đầy đủ: `localhost:3000/api/v1/movies/review`.
 
+**Mã chính:**
+
+```javascript
+router
+  .route("/review")
+  .post(ReviewsController.apiPostReview)
+  .put(ReviewsController.apiUpdateReview)
+  .delete(ReviewsController.apiDeleteReview);
+```
+
 ### 1.2 Thêm review bằng `POST`
 
 **Thực hiện:**
@@ -111,6 +121,16 @@ npm run dev
 
 - Có controller chuyên xử lý yêu cầu review.
 
+**Mã chính:**
+
+```javascript
+import ReviewsDAO from "../dao/reviewsDAO.js";
+
+export default class ReviewsController {
+  // apiPostReview, apiUpdateReview, apiDeleteReview
+}
+```
+
 ### 2.2 Import DAO
 
 **Thực hiện:**
@@ -134,6 +154,26 @@ npm run dev
 
 - Thêm review mới vào collection `reviews`.
 
+**Mã chính:**
+
+```javascript
+const movieId = req.body.movie_id;
+const review = req.body.review || req.body.text;
+const userInfo = req.body.userinfo || {};
+const userId = userInfo.id || req.body.user_id;
+const name = userInfo.name || req.body.name;
+const date = new Date();
+
+const reviewResponse = await ReviewsDAO.addReview(
+  movieId,
+  userId,
+  name,
+  review,
+  date,
+);
+res.json({ status: "success" });
+```
+
 ### 2.4 Tạo `apiUpdateReview()`
 
 **Thực hiện:**
@@ -147,6 +187,22 @@ npm run dev
 
 - Chỉ user tạo review mới được phép cập nhật review đó.
 
+**Mã chính:**
+
+```javascript
+const reviewResponse = await ReviewsDAO.updateReview(
+  reviewId,
+  userId,
+  review,
+  date,
+);
+
+if (reviewResponse.modifiedCount === 0) {
+  throw new Error("Unable to update review - user may not be original poster");
+}
+res.json({ status: "success" });
+```
+
 ### 2.5 Tạo `apiDeleteReview()`
 
 **Thực hiện:**
@@ -158,6 +214,17 @@ npm run dev
 **Kết quả:**
 
 - Chỉ user tạo review mới được phép xóa review đó.
+
+**Mã chính:**
+
+```javascript
+const reviewResponse = await ReviewsDAO.deleteReview(reviewId, userId);
+
+if (reviewResponse.deletedCount === 0) {
+  throw new Error("Unable to delete review - user may not be original poster");
+}
+res.json({ status: "success" });
+```
 
 ## Bài 3: Thiết lập DAO cho reviews
 
@@ -172,6 +239,15 @@ npm run dev
 
 - Có tầng DAO cho nghiệp vụ review.
 
+**Mã chính:**
+
+```javascript
+import mongodb from "mongodb";
+
+const ObjectId = mongodb.ObjectId;
+let reviews;
+```
+
 ### 3.2 Tạo `injectDB()`
 
 **Thực hiện:**
@@ -183,6 +259,22 @@ npm run dev
 
 - Backend sẵn sàng thao tác với collection `reviews`.
 
+**Mã chính:**
+
+```javascript
+// dao/reviewsDAO.js
+static async injectDB(conn) {
+  if (reviews) return;
+  reviews = await conn.db(process.env.MOVIEREVIEWS_NS).collection("reviews");
+}
+```
+
+```javascript
+// index.js
+await MoviesDAO.injectDB(client);
+await ReviewsDAO.injectDB(client);
+```
+
 ### 3.3 Tạo `addReview()`
 
 **Thực hiện:**
@@ -193,6 +285,19 @@ npm run dev
 **Kết quả:**
 
 - Lưu được review mới liên kết đúng với phim.
+
+**Mã chính:**
+
+```javascript
+const reviewDoc = {
+  name: name,
+  user_id: userId,
+  date: date,
+  text: review,
+  movie_id: new ObjectId(movieId),
+};
+return await reviews.insertOne(reviewDoc);
+```
 
 ### 3.4 Tạo `updateReview()`
 
@@ -206,6 +311,15 @@ npm run dev
 
 - Đảm bảo đúng user mới sửa được review.
 
+**Mã chính:**
+
+```javascript
+return await reviews.updateOne(
+  { user_id: userId, _id: new ObjectId(reviewId) },
+  { $set: { text: review, date: date } },
+);
+```
+
 ### 3.5 Tạo `deleteReview()`
 
 **Thực hiện:**
@@ -218,38 +332,92 @@ npm run dev
 
 - Đảm bảo đúng user mới xóa được review.
 
+**Mã chính:**
+
+```javascript
+return await reviews.deleteOne({
+  _id: new ObjectId(reviewId),
+  user_id: userId,
+});
+```
+
 ### 3.6 Thử nghiệm API review
 
-**Mẫu request (Insomnia/Postman/cURL):**
+**Thực hiện (Postman):**
 
-```bash
-curl -X POST http://localhost:3000/api/v1/movies/review \
-  -H "Content-Type: application/json" \
-  -d '{
-    "movie_id": "<movie_id>",
-    "review": "Great movie!",
-    "userinfo": { "name": "Ngo Van Thinh", "id": "23521500" }
-  }'
+1. Tạo Environment:
+- `base_url = http://localhost:3000/api/v1/movies`
+- `user_id = 23521500`
+- `user_name = Ngo Van Thinh`
+- `movie_id` và `review_id` sẽ cập nhật sau.
+
+![3.6-step-1-postman-environment](image/3.6-step-1-postman-environment.png)
+
+2. Lấy `movie_id`:
+- Gửi `GET {{base_url}}?moviesPerPage=1`.
+- Copy `movies[0]._id` và gán vào biến `movie_id`.
+
+![3.6-step-2-get-movie-id](image/3.6-step-2-get-movie-id.png)
+
+3. Test `POST /review`:
+- URL: `{{base_url}}/review`
+- Body (raw JSON):
+
+```json
+{
+  "movie_id": "{{movie_id}}",
+  "review": "Great movie from Postman",
+  "userinfo": {
+    "name": "{{user_name}}",
+    "id": "{{user_id}}"
+  }
+}
+```
+![3.6-step-3-post-review-success](image/3.6-step-3-post-review-success.png)
+
+4. Lấy `review_id`:
+- Gửi `GET {{base_url}}/id/{{movie_id}}`.
+- Tìm review vừa tạo, copy `_id` và gán vào biến `review_id`.
+
+![3.6-step-4-get-review-id](image/3.6-step-4-get-review-id.png)
+
+**Movie id và review id:**
+![3.6-step-4b-check-movie-and-review-id](image/3.6-step-4b-check-movie-and-review-id.png)
+
+5. Test `PUT /review`:
+- URL: `{{base_url}}/review`
+- Body (raw JSON):
+
+```json
+{
+  "review_id": "{{review_id}}",
+  "user_id": "{{user_id}}",
+  "review": "Updated review text from Postman"
+}
 ```
 
-```bash
-curl -X PUT http://localhost:3000/api/v1/movies/review \
-  -H "Content-Type: application/json" \
-  -d '{
-    "review_id": "<review_id>",
-    "user_id": "23521500",
-    "review": "Updated review text"
-  }'
-```
+![3.6-step-5-put-review-success](image/3.6-step-5-put-review-success.png)
 
-```bash
-curl -X DELETE http://localhost:3000/api/v1/movies/review \
-  -H "Content-Type: application/json" \
-  -d '{
-    "review_id": "<review_id>",
-    "user_id": "23521500"
-  }'
+6. Test `DELETE /review`:
+- URL: `{{base_url}}/review`
+- Body (raw JSON):
+
+```json
+{
+  "review_id": "{{review_id}}",
+  "user_id": "{{user_id}}"
+}
 ```
+![3.6-step-6-delete-review-success](image/3.6-step-6-delete-review-success.png)
+
+**Kết quả mong đợi:**
+
+- Cả 3 request `POST`, `PUT`, `DELETE` trả `200` và body `{ "status": "success" }`.
+
+**Link kiểm tra nhanh API:**
+
+- `http://localhost:3000/api/v1/movies/review` (POST/PUT/DELETE)
+
 
 ## Bài 4: Hoàn thiện back-end cho ứng dụng minh họa
 
@@ -264,6 +432,13 @@ curl -X DELETE http://localhost:3000/api/v1/movies/review \
 
 - Hoàn chỉnh nhóm API đọc dữ liệu nâng cao cho movie.
 
+**Mã chính:**
+
+```javascript
+router.route("/id/:id").get(MoviesController.apiGetMovieById);
+router.route("/ratings").get(MoviesController.apiGetRatings);
+```
+
 ### 4.2 Thêm 2 phương thức controller trong `movies.controller.js`
 
 **Thực hiện:**
@@ -274,6 +449,22 @@ curl -X DELETE http://localhost:3000/api/v1/movies/review \
 **Kết quả:**
 
 - Controller xử lý đúng 2 route mới.
+
+**Mã chính:**
+
+```javascript
+static async apiGetMovieById(req, res, next) {
+  const movieId = req.params.id || {};
+  const movie = await MoviesDAO.getMovieById(movieId);
+  if (!movie) return res.status(404).json({ error: "Movie not found" });
+  res.json(movie);
+}
+
+static async apiGetRatings(req, res, next) {
+  const ratings = await MoviesDAO.getRatings();
+  res.json(ratings);
+}
+```
 
 ### 4.3 Thêm 2 phương thức DAO trong `moviesDAO.js`
 
@@ -286,6 +477,29 @@ curl -X DELETE http://localhost:3000/api/v1/movies/review \
 
 - Trả được dữ liệu tổng hợp phim + review và danh sách rating.
 
+**Mã chính:**
+
+```javascript
+static async getMovieById(id) {
+  const pipeline = [
+    { $match: { _id: new ObjectId(id) } },
+    {
+      $lookup: {
+        from: "reviews",
+        localField: "_id",
+        foreignField: "movie_id",
+        as: "reviews",
+      },
+    },
+  ];
+  return await movies.aggregate(pipeline).next();
+}
+
+static async getRatings() {
+  return await movies.distinct("rated");
+}
+```
+
 ### 4.4 Thử nghiệm các API mới
 
 **Mẫu request:**
@@ -297,6 +511,15 @@ curl http://localhost:3000/api/v1/movies/ratings
 ```bash
 curl http://localhost:3000/api/v1/movies/id/<movie_id>
 ```
+
+**Link kiểm tra nhanh API:**
+
+- `http://localhost:3000/api/v1/movies/ratings`
+- `http://localhost:3000/api/v1/movies/id/<movie_id>`
+
+**Ảnh minh họa:**
+
+![4.4-api-ratings-and-movie-by-id-results](image/4.4-api-ratings-and-movie-by-id-results.png)
 
 ## 7. Kết quả thực hiện tổng quan
 
