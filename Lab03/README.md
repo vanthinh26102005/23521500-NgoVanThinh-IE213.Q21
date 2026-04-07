@@ -527,7 +527,7 @@ static async getRatings() {
 - `http://localhost:3000/api/v1/movies/id/<movie_id>`
 
 **Ảnh minh họa:**
-
+![4.4-postman-environment](image/4.4-postman-environment.png)
 ![4.4-get-ratings-postman](image/4.4-get-ratings-postman.png)
 
 ![4.4-get-movie-by-id-postman](image/4.4-get-movie-by-id-postman.png)
