@@ -451,7 +451,7 @@ return formatted.isValid()
 
 **Ảnh minh họa:**
 
-![1777980225351](https://file+.vscode-resource.vscode-cdn.net/Users/a23521500/Documents/NAM_3/IE213-BLOCKCHAIN/BTTH/Lab05/image/README/1777980225351.png)
+![1777980620844](image/README/1777980620844.png)
 
 ## 7. Ghi chú triển khai
 
