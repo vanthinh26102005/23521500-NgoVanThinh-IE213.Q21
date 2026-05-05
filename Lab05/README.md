@@ -74,7 +74,7 @@ npm install axios moment
 
 **Ảnh minh họa:**
 
-[PLACEHOLDER_IMAGE_1.1: Chèn ảnh terminal sau khi chạy `npm install axios moment` hoặc ảnh `package.json` hiển thị 2 dependency mới]
+![1777978165685](image/README/1777978165685.png)
 
 ### 1.2 Tạo lớp dịch vụ `MovieDataService`
 
