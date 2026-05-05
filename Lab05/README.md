@@ -394,7 +394,43 @@ React.useEffect(() => {
 
 ![1777976697245](image/README/1777976697245.png)
 
-### 4.2 Điều chỉnh cách hiển thị giờ với `momentjs`
+### 4.2 Thêm review
+
+**Thực hiện:**
+
+- Tạo component `add-review.js` để nhập nội dung review.
+- Dùng `MovieDataService.createReview()` để gửi dữ liệu lên backend.
+- Lấy `movie_id` từ route và `userinfo` từ trạng thái đăng nhập của người dùng.
+- Sau khi thêm thành công, điều hướng người dùng quay lại trang chi tiết movie.
+
+**Mã chính:**
+
+```javascript
+async function saveReview(event) {
+  event.preventDefault();
+
+  await MovieDataService.createReview({
+    movie_id: id,
+    review: review.trim(),
+    userinfo: {
+      name: user.name,
+      id: user.id,
+    },
+  });
+
+  navigate(`/movies/${id}`);
+}
+```
+
+**Kết quả:**
+
+- Người dùng có thể thêm review mới cho movie trực tiếp từ frontend.
+
+**Ảnh minh họa:**
+
+![1777980191556](image/README/1777980191556.png)
+
+### 4.3 Điều chỉnh cách hiển thị giờ với `momentjs`
 
 **Thực hiện:**
 
@@ -415,7 +451,7 @@ return formatted.isValid()
 
 **Ảnh minh họa:**
 
-![1777976853954](image/README/1777976853954.png)
+![1777980225351](https://file+.vscode-resource.vscode-cdn.net/Users/a23521500/Documents/NAM_3/IE213-BLOCKCHAIN/BTTH/Lab05/image/README/1777980225351.png)
 
 ## 7. Ghi chú triển khai
 
